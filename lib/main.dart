@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async' show Future;
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -41,26 +39,17 @@ Future<String> _loadRemoteData() async {
   final response = await (http
       .get(Uri.parse('https://api.jsonbin.io/b/60f1d0e0a917050205c8fa9a/2')));
   if (response.statusCode == 200) {
-    print('response statusCode is 200');
     return response.body;
   } else {
-    print('Http Error: ${response.statusCode}!');
-    throw Exception('Invalid data source.');
+    throw Exception('Not able to pull the data.');
   }
-}
-
-Future<String> _loadLocalData() async {
-  return await rootBundle.loadString('assets/marvel.json');
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<Starships> fetchQuests() async {
-    //  String jsonString = await _loadLocalData();
     String jsonString = await _loadRemoteData();
-    // print('jsonString: ${jsonString}');
 
     final List<dynamic> jsonResponse = json.decode(jsonString);
-    print('jsonResponse: ${jsonResponse}');
 
     Starships starships = new Starships.fromJson(jsonResponse);
 
